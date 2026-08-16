@@ -14,22 +14,9 @@
 
 | **Approach** | **Command** | **Pros** | **Cons** | **Best Used When** |
 | --- | --- | --- | --- | --- |
-| **1. Direct Command** | `ssh bandit18@bandit.labs.overthewire.org -p 2220 cat readme` | • Fast & concise
-
-• No pseudo-terminal needed | • One-off execution
-
-• No interactive shell to navigate | You know the exact file path or command you need to run. |
-| **2. Bypassing RC Hooks** | `ssh -t bandit18@bandit.labs.overthewire.org -p 2220 /bin/bash --norc` | • Full interactive `bash` prompt
-
-• Keeps tab completion and features | • Requires `-t` flag
-
-• Specific to `bash` | You need full interactive access on a machine with broken `.bashrc` scripts. |
-| **3. Alternate Shell** | `ssh -t bandit18@bandit.labs.overthewire.org -p 2220 /bin/sh` | • Bypasses `bash` configs completely
-
-• Works across POSIX systems | • Minimal shell prompt (`$`)
-
-• Lacks advanced `bash` shortcuts | `bash` is restricted, locked down, or unavailable. |
-
+| **1. Direct Command** | `ssh bandit18@bandit.labs.overthewire.org -p 2220 cat readme` | • Fast & concise<br>• No pseudo-terminal needed | • One-off execution<br>• No interactive shell to navigate | You know the exact file path or command you need to run. |
+| **2. Bypassing RC Hooks** | `ssh -t bandit18@bandit.labs.overthewire.org -p 2220 /bin/bash --norc` | • Full interactive `bash` prompt<br>• Keeps tab completion and features | • Requires `-t` flag<br>• Specific to `bash` | You need full interactive access on a machine with broken `.bashrc` scripts. |
+| **3. Alternate Shell** | `ssh -t bandit18@bandit.labs.overthewire.org -p 2220 /bin/sh` | • Bypasses `bash` configs completely<br>• Works across POSIX systems | • Minimal shell prompt (`$`)<br>• Lacks advanced `bash` shortcuts | `bash` is restricted, locked down, or unavailable. |
 ### Terminal Execution & Proof
 
 **Method 1: Direct Command Execution**
