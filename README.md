@@ -6,7 +6,9 @@
 ![Security](https://img.shields.io/badge/Security-Red?style=for-the-badge&logo=linux-foundation&logoColor=white)
 ![Documentation](https://img.shields.io/badge/Documentation-007ACC?style=for-the-badge&logo=markdown&logoColor=white)
 
-This repository documents hands-on technical solutions, security analysis, and administrative workflows developed through the **OverTheWire: Bandit** wargame challenges (Levels 0 → 20). It serves as technical evidence of core Linux systems administration capabilities, POSIX file permissions management, remote shell troubleshooting, and privilege boundary verification critical for modern DevOps and Infrastructure engineering roles.
+This repository documents hands-on technical solutions, security analysis, and administrative workflows developed through the **OverTheWire: Bandit** wargame challenges (Levels 0 → 20). 
+
+It serves as technical evidence of core Linux systems administration capabilities, POSIX file permissions management, remote shell troubleshooting, and privilege boundary verification critical for modern DevOps and Infrastructure engineering roles.
 
 ---
 
@@ -36,6 +38,10 @@ This repository documents hands-on technical solutions, security analysis, and a
 
 ---
 
+---
+
+---
+
 ## 🔍 Technical Deep-Dive Spotlights
 
 ### Spotlight 1: Bypassing Restricted Interactive Shells (Level 18 → 19)
@@ -45,16 +51,17 @@ This repository documents hands-on technical solutions, security analysis, and a
 **Technical Analysis & Resolution:**  
 When an SSH session requests an interactive shell, `bash` automatically sources initialization scripts like `.bashrc`. By appending a command directly to the SSH invocation, the request is executed as a non-interactive command, bypassing interactive RC initialization files. Alternatively, forcing a pseudo-terminal while explicitly disabling startup configs (`/bin/bash --norc`) allows full shell access.
 
-
+```text
 [Local Workstation] --- ( SSH Request + 'cat readme' ) ---> [Remote Server]
-|
-Bypasses interactive .bashrc
-|
+                                                                  |
+                                                     Bypasses interactive .bashrc
+                                                                  |
 [ Password Returned ] <--- ( Stream Result ) ---------------------/
 
 
-**Execution Methods:**
-```bash
+Execution Methods:
+
+Bash
 # Method 1: Direct Non-Interactive Command Execution
 ssh bandit18@bandit.labs.overthewire.org -p 2220 cat readme
 
@@ -64,14 +71,16 @@ ssh -t bandit18@bandit.labs.overthewire.org -p 2220 /bin/bash --norc
 # Method 3: Invoke POSIX Alternate Shell
 ssh -t bandit18@bandit.labs.overthewire.org -p 2220 /bin/sh
 
+```
 
-Spotlight 2: SetUID Execution & Privilege Boundaries (Level 19 → 20)
-Problem Statement: The target credential file (/etc/bandit_pass/bandit20) is restricted to the bandit20 owner. The current user (bandit19) lacks read access.
+### Spotlight 2: SetUID Execution & Privilege Boundaries (Level 19 → 20)
 
-Technical Analysis & Resolution:
+**Problem Statement:** The target credential file (/etc/bandit_pass/bandit20) is restricted to the bandit20 owner. The current user (bandit19) lacks read access.
 
+**Technical Analysis & Resolution:**
 The home directory contains a compiled binary (bandit20-do) with the SetUID (s) permission bit enabled (-rwsr-x---). When executed, the process inherits the effective privileges of the binary's file owner (bandit20), rather than the invoking user (bandit19). Passing target commands to this executable allows controlled execution inside the higher security boundary.
 
+```text
 [ Invoking User: bandit19 ]
            │
            ▼
@@ -85,7 +94,9 @@ Executes ./bandit20-do cat /etc/bandit_pass/bandit20
                                        │
                                        ▼
                      [ Returns Protected Credential ]
-Execution:
+
+
+Execution Methods:
 
 Bash
 # Verify permissions and SetUID bit (note the 's' in the owner permissions)
@@ -95,3 +106,5 @@ bandit19@bandit:~$ ls -l bandit20-do
 # Execute binary to read protected path under owner privilege context
 bandit19@bandit:~$ ./bandit20-do cat /etc/bandit_pass/bandit20
 4pIjcunZ0fK2vmp3IwfG8Vf7VhxD6pOA
+
+```
