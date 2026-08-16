@@ -1,0 +1,23 @@
+# OverTheWire: Bandit Walkthrough
+
+## Level 00 → Level 01: SSH Connection & Credentials
+
+### Challenge Focus
+* **Concept:** Remote Server Access over Custom Ports & Standard Stream Inspection
+* **Target Host:** `bandit.labs.overthewire.org`
+* **Port:** `2220`
+* **Credentials:** User: `bandit0` | Pass: `bandit0`
+
+---
+
+### Command Sequence
+
+```bash
+# 1. Connect to the target host on the custom SSH port
+ssh bandit0@bandit.labs.overthewire.org -p 2220
+
+# 2. Inspect the current directory contents
+ls -la
+
+# 3. Read the credential file to standard output
+cat readme
