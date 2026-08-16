@@ -1,23 +1,36 @@
-# OverTheWire: Bandit Walkthrough
+# 🔑 Level 00 → 01: SSH Connection & Credentials
 
-## Level 00 → Level 01: SSH Connection & Credentials
-
-### Challenge Focus
-* **Concept:** Remote Server Access over Custom Ports & Standard Stream Inspection
-* **Target Host:** `bandit.labs.overthewire.org`
-* **Port:** `2220`
-* **Credentials:** User: `bandit0` | Pass: `bandit0`
+![SSH](https://img.shields.io/badge/SSH-000000?style=for-the-badge&logo=OpenSSH&logoColor=white)
+![Linux](https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black)
+![Security](https://img.shields.io/badge/Security-Red?style=for-the-badge&logo=linux-foundation&logoColor=white)
 
 ---
 
-### Command Sequence
+## 🎯 Objective
+Establish an encrypted remote SSH session to the target infrastructure over a non-standard port and perform initial file inspection to extract the next-level system credential.
+
+---
+
+## ⚙️ Technical Breakdown
+
+| Parameter | Value | DevOps / Security Context |
+| :--- | :--- | :--- |
+| **Host** | `bandit.labs.overthewire.org` | Target edge host endpoint |
+| **Port** | `2220` | Bypasses default TCP `22` to mitigate automated port scanning |
+| **User / Pass** | `bandit0` / `bandit0` | Initial entry-level low-privilege identity |
+| **Artifact** | `./readme` | Target file containing `bandit1` passkey |
+
+---
+
+## 🚀 Execution & Verification
 
 ```bash
-# 1. Connect to the target host on the custom SSH port
+# 1. Establish SSH connection over custom port 2220
 ssh bandit0@bandit.labs.overthewire.org -p 2220
 
-# 2. Inspect the current directory contents
-ls -la
+# 2. Verify current landing directory and inspect file nodes
+pwd     # Output: /home/bandit0
+ls -la  # Verify node presence and POSIX permissions
 
-# 3. Read the credential file to standard output
+# 3. Read target credential directly to stdout
 cat readme
